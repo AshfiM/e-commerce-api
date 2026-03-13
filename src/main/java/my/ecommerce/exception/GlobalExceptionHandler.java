@@ -17,9 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> loginExceptionHandler(LoginException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("msg", ex.getMessage());
-        error.put("status", HttpStatus.UNAUTHORIZED);
+        error.put("status", HttpStatus.UNAUTHORIZED.value());
         error.put("timestamp", Instant.now());
-        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
     }
 
 }

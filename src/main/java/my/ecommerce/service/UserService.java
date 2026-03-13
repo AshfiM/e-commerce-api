@@ -1,5 +1,6 @@
 package my.ecommerce.service;
 
+import my.ecommerce.dto.Signupdto;
 import my.ecommerce.exception.LoginException;
 import my.ecommerce.models.UserEntity;
 import my.ecommerce.repository.UserRepository;
@@ -25,5 +26,13 @@ public class UserService {
         else {
             throw new LoginException("Invalid Credentials");
         }
+    }
+
+    public UserEntity addUser(Signupdto user) {
+        UserEntity newUser = new UserEntity();
+        newUser.setUsername(user.getUsername());
+        newUser.setHash(encoder.encode(user.getPassword()));
+        newUser.setRole(user.getRole());
+        return userRepository.save(newUser);
     }
 }
