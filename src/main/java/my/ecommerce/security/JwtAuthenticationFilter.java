@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.jaas.AuthorityGranter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -39,14 +42,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     throws ServletException, IOException {
 
         String token = getJwtFromCookie(req.getCookies());
+
         if(!token.equals("") && jwtService.validateToken(token)) {
             String userName = jwtService.extractUsername(token);
+            String role = jwtService.extractClaim(token, claims -> claims.get("role", String.class));
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+role.toUpperCase());
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userName, null, new ArrayList<>()
+                    userName, null, List.of(authority)
             );
             SecurityContextHolder.getContext().setAuthentication(authToken);
-
         }
+
         filterChain.doFilter(req, resp);
     }
 }

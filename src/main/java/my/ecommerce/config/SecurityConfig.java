@@ -26,6 +26,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((req) ->
                         req
                                 .requestMatchers("/home/login","/error", "/home/signup").permitAll()
+                                .requestMatchers("/home/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class );

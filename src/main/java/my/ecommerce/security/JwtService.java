@@ -17,8 +17,9 @@ import java.util.function.Function;
 public class JwtService {
     private static final String secret = "unN7T5xsIi19omKLLhe4ntESoLog+APlzBfW7hIVN7w=";
     private static final long expireTime = 3600000;
-    public String generateToken(String username) {
+    public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", role);
         return createToken(claims, username);
     }
 

@@ -35,7 +35,7 @@ public class HomeController {
             produces = "application/json")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto loginDto) {
         UserEntity user = userService.findUser(loginDto.getUsername(), loginDto.getPassword());
-        String token = jwtService.generateToken(user.getUsername());
+        String token = jwtService.generateToken(user.getUsername(), user.getRole());
         ResponseCookie responseCookie = ResponseCookie.from("jwt-token", token)
                 .httpOnly(true)
                 .secure(false)
@@ -62,4 +62,10 @@ public class HomeController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<Map<String, Object>> adminHome(){
+        Map<String, Object> admin = new HashMap<>();
+        admin.put("login", "successful");
+        return ResponseEntity.ok(admin);
+    }
 }
