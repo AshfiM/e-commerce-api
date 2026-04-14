@@ -5,13 +5,20 @@ import my.ecommerce.models.ProductsEntity;
 import my.ecommerce.service.ProductsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
 @RequestMapping("/prod")
 public class ProductsController {
     private final ProductsService productsService;
+    private static final String upload_dir = "uploads/";
     public ProductsController(ProductsService productsService){
         this.productsService = productsService;
     }
@@ -52,5 +59,25 @@ public class ProductsController {
         newPro.setProd_cat(product.getCategory().getCat_name());
         newPro.setCat_id(product.getCategory().getCat_id());
         return ResponseEntity.ok(newPro);
+    }
+
+    @PostMapping(value = "/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            File directory = new File(upload_dir);
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            byte[] bytes = file.getBytes();
+            Path path = Paths.get(upload_dir + file.getOriginalFilename());
+            Files.write(path, bytes);
+            return ResponseEntity.ok("file uploaded" + file.getOriginalFilename());
+        } catch (IOException e) {
+            System.out.println("file upload error");
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
