@@ -1,8 +1,13 @@
 package my.ecommerce.controller;
 
+import com.sun.net.httpserver.Headers;
 import my.ecommerce.dto.ProductDto;
 import my.ecommerce.models.ProductsEntity;
 import my.ecommerce.service.ProductsService;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,6 +82,25 @@ public class ProductsController {
             return ResponseEntity.ok("file uploaded" + file.getOriginalFilename());
         } catch (IOException e) {
             System.out.println("file upload error");
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<Resource> download(@PathVariable String fileName) {
+        try {
+            Path path = Paths.get(upload_dir).resolve(fileName).normalize();
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachement; fileName=\"" + resource.getFilename()+"\"")
+                        .body(resource);
+            }
+            else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            System.out.println("download error"+e);
             return ResponseEntity.internalServerError().build();
         }
     }
