@@ -1,13 +1,15 @@
 package my.ecommerce.models;
 
 import jakarta.persistence.*;
+import my.ecommerce.dto.ProductDto;
 
 @Entity
 @Table(name = "products")
-public class ProductsEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long product_id;
+    @Column(name = "product_id")
+    private Long id;
 
     @Column
     private String product_name;
@@ -18,8 +20,8 @@ public class ProductsEntity {
     @JoinColumn(name = "cat_id")
     CategoryEntity category;
 
-    public ProductsEntity(){}
-    public ProductsEntity(String product_name, float price) {
+    public ProductEntity(){}
+    public ProductEntity(String product_name, float price) {
         this.product_name = product_name;
         this.price = price;
     }
@@ -48,12 +50,20 @@ public class ProductsEntity {
     }
 
 
-    public Long getProduct_id() {
-        return product_id;
+    public Long getId() {
+        return id;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setId(Long product_id) {
+        this.id = product_id;
+    }
+
+    public ProductDto productEntityToProductDto() {
+        return new ProductDto(this.id,
+                this.getProduct_name(),
+                this.getPrice(),
+                this.getCategory().getCat_name(),
+                this.getCategory().getId());
     }
 
 

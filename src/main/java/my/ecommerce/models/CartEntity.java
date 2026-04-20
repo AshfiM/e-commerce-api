@@ -13,12 +13,34 @@ public class CartEntity {
     private Long id;
 
     @OneToOne
-    private UserEntity user;
-
+    @JoinColumn(name = "user_id")
+    private UserEntity userId;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems = new ArrayList<>();
+    private List<CartItemEntity> cartItemEntities = new ArrayList<>();
 
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserEntity getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UserEntity user_id) {
+        this.userId = user_id;
+    }
+
+    public List<CartItemEntity> getCartItems() {
+        return cartItemEntities;
+    }
+
+    public void setCartItems(List<CartItemEntity> cartItemEntities) {
+        this.cartItemEntities = cartItemEntities;
+    }
 }

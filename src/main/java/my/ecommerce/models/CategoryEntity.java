@@ -10,15 +10,16 @@ public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cat_id;
+    @Column(name = "cat_id")
+    private Long id;
     @Column
     private String cat_name;
 
     @OneToMany(mappedBy = "category")
-    List<ProductsEntity> products;
+    List<ProductEntity> products;
 
-    public Long getCat_id() {
-        return cat_id;
+    public Long getId() {
+        return id;
     }
 
     public CategoryEntity(){}
@@ -26,8 +27,8 @@ public class CategoryEntity {
         cat_name = catName;
     }
 
-    public void setCat_id(Long cat_id) {
-        this.cat_id = cat_id;
+    public void setId(Long cat_id) {
+        this.id = cat_id;
     }
 
     public String getCat_name() {
@@ -38,11 +39,11 @@ public class CategoryEntity {
         this.cat_name = cat_name;
     }
 
-    public List<ProductsEntity> getProducts() {
+    public List<ProductEntity> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductsEntity> products) {
+    public void setProducts(List<ProductEntity> products) {
         this.products = products;
     }
 }

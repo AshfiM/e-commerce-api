@@ -20,7 +20,7 @@ public class CategoryController {
         return  ResponseEntity.ok(categoryService.getCats().stream().map((cat)->{
             CategoryDto newCat = new CategoryDto();
             newCat.setCat_name(cat.getCat_name());
-            newCat.setCat_id(cat.getCat_id());
+            newCat.setCat_id(cat.getId());
             return newCat;
         }).toList());
     }
@@ -28,7 +28,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> insertCat(@RequestBody CategoryDto category){
         CategoryEntity newCategory = categoryService.insertCategory(category.getCat_name());
         CategoryDto cat = new CategoryDto();
-        cat.setCat_id(newCategory.getCat_id());
+        cat.setCat_id(newCategory.getId());
         cat.setCat_name(category.getCat_name());
         return ResponseEntity.ok(cat);
     }

@@ -1,16 +1,16 @@
 package my.ecommerce.dto;
 
 public class CartItemDto {
-    private Long cartItemId;
-    private int qty;
-    private ProductDto product;
 
-    public Long getCartItemId() {
-        return cartItemId;
+    private int qty;
+    private Long productId;
+
+    public CartItemDto(int qty, Long productId) {
+        this.qty = qty;
+        this.productId = productId;
     }
 
-    public void setCartItemId(Long cartItemId) {
-        this.cartItemId = cartItemId;
+    public CartItemDto() {
     }
 
     public int getQty() {
@@ -21,11 +21,11 @@ public class CartItemDto {
         this.qty = qty;
     }
 
-    public ProductDto getProduct() {
-        return product;
+    public Long getProductId() {
+        return productId;
     }
 
-    public void setProduct(ProductDto product) {
-        this.product = product;
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

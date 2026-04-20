@@ -11,6 +11,17 @@ public class ProductDto {
         return cat_id;
     }
 
+    public ProductDto() {
+    }
+
+    public ProductDto(Long prod_id, String prod_name, float prod_price, String prod_cat, Long cat_id) {
+        this.prod_id = prod_id;
+        this.prod_name = prod_name;
+        this.prod_price = prod_price;
+        this.prod_cat = prod_cat;
+        this.cat_id = cat_id;
+    }
+
     public void setCat_id(Long cat_id) {
         this.cat_id = cat_id;
     }

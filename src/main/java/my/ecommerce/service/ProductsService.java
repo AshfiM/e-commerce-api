@@ -1,7 +1,7 @@
 package my.ecommerce.service;
 
 import my.ecommerce.models.CategoryEntity;
-import my.ecommerce.models.ProductsEntity;
+import my.ecommerce.models.ProductEntity;
 import my.ecommerce.repository.CategoryRepository;
 import my.ecommerce.repository.ProductsRepository;
 import org.springframework.data.domain.Page;
@@ -23,19 +23,19 @@ public class ProductsService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<ProductsEntity> getAllProducts(){
+    public List<ProductEntity> getAllProducts(){
         return productsRepository.findAll();
     }
 
-    public Page<ProductsEntity> getLimitedProducts(int max) {
+    public Page<ProductEntity> getLimitedProducts(int max) {
         Pageable maxPages = PageRequest.of(0, max);
         return productsRepository.findAll(maxPages);
 
     }
-    public ProductsEntity insertProduct(Long cat_id, String prodName, float price) {
+    public ProductEntity insertProduct(Long cat_id, String prodName, float price) {
         CategoryEntity category = categoryRepository.findById(cat_id)
                 .orElseThrow(() -> new RuntimeException("invalid category"));
-        ProductsEntity product = new ProductsEntity(prodName, price);
+        ProductEntity product = new ProductEntity(prodName, price);
         product.setCategory(category);
         return productsRepository.save(product);
     }

@@ -1,8 +1,7 @@
 package my.ecommerce.controller;
 
-import com.sun.net.httpserver.Headers;
 import my.ecommerce.dto.ProductDto;
-import my.ecommerce.models.ProductsEntity;
+import my.ecommerce.models.ProductEntity;
 import my.ecommerce.service.ProductsService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -31,11 +30,11 @@ public class ProductsController {
     public ResponseEntity<List<ProductDto>> allProducts(){
         return ResponseEntity.ok(productsService.getAllProducts().stream().map((prod)-> {
             ProductDto productDto = new ProductDto();
-            productDto.setProd_id(prod.getProduct_id());
+            productDto.setProd_id(prod.getId());
             productDto.setProd_name(prod.getProduct_name());
             productDto.setProd_price(prod.getPrice());
             productDto.setProd_cat(prod.getCategory().getCat_name());
-            productDto.setCat_id(prod.getCategory().getCat_id());
+            productDto.setCat_id(prod.getCategory().getId());
             return productDto;
         }).toList());
     }
@@ -44,25 +43,25 @@ public class ProductsController {
     public ResponseEntity<List<ProductDto>> getLimitedProducts(@PathVariable int max) {
         return ResponseEntity.ok(productsService.getLimitedProducts(max).stream().map((productsEntity -> {
             ProductDto productDto = new ProductDto();
-            productDto.setProd_id(productsEntity.getProduct_id());
+            productDto.setProd_id(productsEntity.getId());
             productDto.setProd_name(productsEntity.getProduct_name());
             productDto.setProd_price(productsEntity.getPrice());
             productDto.setProd_cat(productsEntity.getCategory().getCat_name());
-            productDto.setCat_id(productsEntity.getCategory().getCat_id());
+            productDto.setCat_id(productsEntity.getCategory().getId());
             return productDto;
         })).toList());
     }
     @PostMapping(value = "/insert",
     consumes = "application/json", produces = "application/json")
     public ResponseEntity<ProductDto> insertProd(@RequestBody ProductDto productDto) {
-        ProductsEntity product = productsService.insertProduct(productDto.getCat_id(),
+        ProductEntity product = productsService.insertProduct(productDto.getCat_id(),
                 productDto.getProd_name(), productDto.getProd_price());
         ProductDto newPro = new ProductDto();
-        newPro.setProd_id(product.getProduct_id());
+        newPro.setProd_id(product.getId());
         newPro.setProd_name(product.getProduct_name());
         newPro.setProd_price(product.getPrice());
         newPro.setProd_cat(product.getCategory().getCat_name());
-        newPro.setCat_id(product.getCategory().getCat_id());
+        newPro.setCat_id(product.getCategory().getId());
         return ResponseEntity.ok(newPro);
     }
 
