@@ -7,6 +7,7 @@ import my.ecommerce.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -67,5 +68,22 @@ public class HomeController {
         Map<String, Object> admin = new HashMap<>();
         admin.put("login", "successful");
         return ResponseEntity.ok(admin);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logout() {
+        ResponseCookie deleCookie = ResponseCookie.from("jwt-token", "")
+                .httpOnly(true)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .build();
+        SecurityContextHolder.clearContext();
+        Map<String, Object> response = new HashMap<>();
+        response.put("msg", "logout successful");
+        response.put("timestamp", Instant.now());
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, deleCookie.toString())
+                .body(response);
+
     }
 }
